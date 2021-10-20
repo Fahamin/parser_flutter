@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
 class VideoApp extends StatefulWidget {
+  var link;
+
+  VideoApp(this.link);
+
   @override
-  _VideoAppState createState() => _VideoAppState();
+  _VideoAppState createState() => _VideoAppState(this.link);
 }
 
 class _VideoAppState extends State<VideoApp> {
   late VideoPlayerController _controller;
 
+  var link;
+
+  _VideoAppState(this.link);
+
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(
-       'https://abp-i.akamaihd.net/hls/live/765530/abpananda/master.m3u8')
+    _controller = VideoPlayerController.network(this.link)
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
@@ -27,9 +35,9 @@ class _VideoAppState extends State<VideoApp> {
         body: Center(
           child: _controller.value.isInitialized
               ? AspectRatio(
-            aspectRatio: _controller.value.aspectRatio,
-            child: VideoPlayer(_controller),
-          )
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller),
+                )
               : Container(),
         ),
         floatingActionButton: FloatingActionButton(
